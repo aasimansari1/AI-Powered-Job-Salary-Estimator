@@ -3,7 +3,6 @@ AI-Powered Job Salary Estimator  –  Streamlit application
 Run:  streamlit run app.py
 """
 import os
-import io
 import json
 import time
 import datetime
@@ -12,7 +11,6 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import streamlit as st
 
 warnings.filterwarnings('ignore')

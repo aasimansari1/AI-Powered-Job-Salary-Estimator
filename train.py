@@ -1,5 +1,5 @@
 """
-Trains, evaluates, and persists five regression models.
+Trains, evaluates, and persists four regression models.
 Automatically generates synthetic data if the CSV does not exist.
 Run:  python train.py
 """
@@ -18,12 +18,7 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 import xgboost as xgb
 import lightgbm as lgb
 
-try:
-    from catboost import CatBoostRegressor
-    CATBOOST_AVAILABLE = True
-except ImportError:
-    CATBOOST_AVAILABLE = False
-    print("CatBoost not available – skipping.")
+CATBOOST_AVAILABLE = False  # removed from requirements for cloud compatibility
 
 warnings.filterwarnings('ignore')
 
