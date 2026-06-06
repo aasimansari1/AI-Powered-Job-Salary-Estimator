@@ -117,10 +117,10 @@ INDUSTRIES = {
 }
 
 COMPANY_SIZES = {
-    'Startup (1–50)': 0.88,
-    'Small (51–200)': 0.94,
-    'Medium (201–1000)': 1.00,
-    'Large (1001–5000)': 1.11,
+    'Startup (1-50)': 0.88,
+    'Small (51-200)': 0.94,
+    'Medium (201-1000)': 1.00,
+    'Large (1001-5000)': 1.11,
     'Enterprise (5000+)': 1.20,
 }
 
@@ -334,7 +334,7 @@ def generate_salary_data(n_samples: int = 15000) -> pd.DataFrame:
 
     df = pd.DataFrame(rows)
     print(f"Generated {len(df)} salary records.")
-    print(f"Salary range: ${df['annual_salary_usd'].min():,} – ${df['annual_salary_usd'].max():,}")
+    print(f"Salary range: ${df['annual_salary_usd'].min():,} - ${df['annual_salary_usd'].max():,}")
     print(f"Median salary: ${df['annual_salary_usd'].median():,.0f}")
     return df
 

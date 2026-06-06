@@ -26,10 +26,10 @@ COUNTRY_LIST = sorted(COUNTRIES_CITIES.keys())
 CITY_LIST = sorted({c for cities in COUNTRIES_CITIES.values() for c in cities})
 INDUSTRY_LIST = sorted(INDUSTRIES.keys())
 COMPANY_SIZE_LIST = [
-    'Startup (1–50)',
-    'Small (51–200)',
-    'Medium (201–1000)',
-    'Large (1001–5000)',
+    'Startup (1-50)',
+    'Small (51-200)',
+    'Medium (201-1000)',
+    'Large (1001-5000)',
     'Enterprise (5000+)',
 ]
 EMPLOYMENT_TYPE_LIST = sorted(EMPLOYMENT_TYPES.keys())
@@ -58,7 +58,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df['country'] = df['country'].fillna('United States')
     df['city'] = df['city'].fillna('Unknown')
     df['industry'] = df['industry'].fillna('Technology')
-    df['company_size'] = df['company_size'].fillna('Medium (201–1000)')
+    df['company_size'] = df['company_size'].fillna('Medium (201-1000)')
     df['employment_type'] = df['employment_type'].fillna('Full-time')
     df['work_mode'] = df['work_mode'].fillna('On-site')
     df['skills'] = df['skills'].fillna('')
@@ -86,7 +86,7 @@ def encode_row(row: dict) -> np.ndarray:
     edu = str(row.get('education_level', "Bachelor's Degree"))
     features.append(float(EDU_ORDER.get(edu, 2)))
 
-    cs = str(row.get('company_size', 'Medium (201–1000)'))
+    cs = str(row.get('company_size', 'Medium (201-1000)'))
     features.append(float(COMPANY_ORDER.get(cs, 2)))
 
     wm = str(row.get('work_mode', 'On-site'))

@@ -60,7 +60,7 @@ def predict_salary(input_dict: dict) -> dict:
     salary = max(5000.0, salary)
 
     r2 = _get_model_r2()
-    # Confidence: scale R² into 55–97 range and adjust by residual spread
+    # Confidence: scale R2 into 55-97 range and adjust by residual spread
     confidence = round(55 + r2 * 42, 1)
     confidence = min(97.0, max(55.0, confidence))
 

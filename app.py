@@ -1,5 +1,5 @@
 """
-AI-Powered Job Salary Estimator  –  Streamlit application
+AI-Powered Job Salary Estimator  -  Streamlit application
 Run:  streamlit run app.py
 """
 import os
@@ -235,7 +235,7 @@ def run_initialization():
         <div style="font-size:3.5rem;margin-bottom:0.6rem;">🚀</div>
         <h3 style="color:#4facfe;margin:0 0 0.4rem;">Preparing Your Salary Estimator</h3>
         <p style="color:#7a8fa6;margin:0;font-size:0.95rem;">
-            Training 5 ML models on 15,000 salary records — takes about 45–60 seconds.<br>
+            Training 5 ML models on 15,000 salary records - takes about 45-60 seconds.<br>
             This only happens once per session.
         </p>
     </div>
@@ -387,7 +387,7 @@ def render_prediction_tab(inputs: dict, result: dict):
             Estimated Annual Salary
         </div>
         <div class="amount">{fmt_currency(sal)}</div>
-        <div class="range">Expected Range: {fmt_currency(sal_min)} – {fmt_currency(sal_max)}</div>
+        <div class="range">Expected Range: {fmt_currency(sal_min)} - {fmt_currency(sal_max)}</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -402,7 +402,7 @@ def render_prediction_tab(inputs: dict, result: dict):
     with col2:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="val" style="font-size:1.6rem;">{fmt_currency(sal_min)} – {fmt_currency(sal_max)}</div>
+            <div class="val" style="font-size:1.6rem;">{fmt_currency(sal_min)} - {fmt_currency(sal_max)}</div>
             <div class="lbl">Salary Range</div>
         </div>""", unsafe_allow_html=True)
     with col3:
@@ -745,8 +745,8 @@ def render_analytics_tab(df: pd.DataFrame):
 
     with c6:
         cs_order = [
-            'Startup (1–50)', 'Small (51–200)', 'Medium (201–1000)',
-            'Large (1001–5000)', 'Enterprise (5000+)',
+            'Startup (1-50)', 'Small (51-200)', 'Medium (201-1000)',
+            'Large (1001-5000)', 'Enterprise (5000+)',
         ]
         cs_df = df.groupby('company_size')['annual_salary_usd'].median().reindex(cs_order).dropna().reset_index()
         cs_df.columns = ['Size', 'Median Salary']
@@ -940,7 +940,7 @@ def render_compare_tab(C: dict):
                 label=f'Scenario {i+1}: {jt}',
                 job_title=jt, years_experience=ye, education_level=edu,
                 country=cty, city=C['countries_cities'][cty][0],
-                industry=ind, company_size='Medium (201–1000)',
+                industry=ind, company_size='Medium (201-1000)',
                 employment_type='Full-time', work_mode=wm,
                 skills=sk, certifications=['None'],
                 color=color,
@@ -1029,7 +1029,7 @@ def render_compare_tab(C: dict):
                 tbl.append({
                     'Scenario': r['label'],
                     'Annual Salary': fmt_currency(r['salary']),
-                    'Range': f"{fmt_currency(r['salary_min'])} – {fmt_currency(r['salary_max'])}",
+                    'Range': f"{fmt_currency(r['salary_min'])} - {fmt_currency(r['salary_max'])}",
                     'Confidence': f"{r['confidence']}%",
                     'Exp Impact': f"{r['impacts']['experience']:+.1f}%",
                     'Skills Impact': f"{r['impacts']['skills']:+.1f}%",
