@@ -564,6 +564,13 @@ def _build_pdf(inputs: dict, result: dict) -> bytes:
     try:
         from fpdf import FPDF
 
+        def _safe(s):
+            return (str(s)
+                .replace('–', '-').replace('—', '-')
+                .replace('‘', "'").replace('’', "'")
+                .replace('“', '"').replace('”', '"')
+                .replace('…', '...'))
+
         class PDF(FPDF):
             def header(self):
                 self.set_fill_color(15, 32, 39)
@@ -590,7 +597,7 @@ def _build_pdf(inputs: dict, result: dict) -> bytes:
             pdf.set_fill_color(26, 42, 61)
             pdf.set_text_color(79, 172, 254)
             pdf.set_font('Helvetica', 'B', 12)
-            pdf.cell(0, 9, title, ln=True, fill=True)
+            pdf.cell(0, 9, _safe(title), ln=True, fill=True)
             pdf.ln(2)
 
         def row(label, value, highlight=False):
@@ -600,8 +607,8 @@ def _build_pdf(inputs: dict, result: dict) -> bytes:
                 pdf.set_font('Helvetica', 'B', 12)
             else:
                 pdf.set_text_color(200, 215, 230)
-            pdf.cell(80, 8, str(label), border='B')
-            pdf.cell(0, 8, str(value), border='B', ln=True)
+            pdf.cell(80, 8, _safe(label), border='B')
+            pdf.cell(0, 8, _safe(value), border='B', ln=True)
             pdf.set_text_color(200, 215, 230)
             pdf.set_font('Helvetica', '', 10)
 
@@ -624,7 +631,7 @@ def _build_pdf(inputs: dict, result: dict) -> bytes:
 
         section('Salary Prediction')
         row('Estimated Annual Salary', f"USD {result['salary']:,}", highlight=True)
-        row('Salary Range', f"USD {result['salary_min']:,} – {result['salary_max']:,}")
+        row('Salary Range', f"USD {result['salary_min']:,} - {result['salary_max']:,}")
         row('Confidence Score', f"{result['confidence']}%")
         row('Monthly Estimate', f"USD {result['salary'] // 12:,}")
         pdf.ln(4)
@@ -639,11 +646,11 @@ def _build_pdf(inputs: dict, result: dict) -> bytes:
         skills_text = ', '.join(result.get('recommended_skills', [])[:8])
         pdf.set_text_color(200, 215, 230)
         pdf.set_font('Helvetica', '', 10)
-        pdf.multi_cell(0, 8, skills_text or 'N/A')
+        pdf.multi_cell(0, 8, _safe(skills_text or 'N/A'))
 
         return bytes(pdf.output())
-    except ImportError:
-        return b'%PDF-1.4\n% PDF export requires fpdf2 package'
+    except Exception:
+        return b'%PDF-1.4\n% PDF export unavailable'
 
 
 # ── Tab 2: Analytics ──────────────────────────────────────────────────────────
