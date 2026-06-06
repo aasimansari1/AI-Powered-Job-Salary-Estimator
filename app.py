@@ -5,6 +5,7 @@ Run:  streamlit run app.py
 import os
 import io
 import json
+import time
 import datetime
 import warnings
 import numpy as np
@@ -227,21 +228,45 @@ def load_dataset():
 
 
 def run_initialization():
-    """Auto-generate data and train model with a progress UI."""
-    progress_bar = st.progress(0, text='Generating synthetic salary dataset…')
+    """
+    Runs automatically on cold start when the trained model is absent.
+    Generates data (if needed) then trains all models, showing live progress.
+    """
+    st.markdown("""
+    <div style="text-align:center;padding:2rem 1rem 1rem 1rem;">
+        <div style="font-size:3.5rem;margin-bottom:0.6rem;">🚀</div>
+        <h3 style="color:#4facfe;margin:0 0 0.4rem;">Preparing Your Salary Estimator</h3>
+        <p style="color:#7a8fa6;margin:0;font-size:0.95rem;">
+            Training 5 ML models on 15,000 salary records — takes about 45–60 seconds.<br>
+            This only happens once per session.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    if not os.path.exists('data/salary_data.csv'):
-        from generate_data import generate_salary_data
-        os.makedirs('data', exist_ok=True)
-        df = generate_salary_data(15000)
-        df.to_csv('data/salary_data.csv', index=False)
+    col_l, col_m, col_r = st.columns([1, 3, 1])
+    with col_m:
+        pbar = st.progress(0, text='📂  Loading salary dataset…')
+        time.sleep(0.3)
 
-    progress_bar.progress(40, text='Training ML models (Ridge, RF, XGBoost, LightGBM, CatBoost)…')
+        os.makedirs('models', exist_ok=True)
 
-    import train as tr
-    tr.main()
+        if not os.path.exists('data/salary_data.csv'):
+            pbar.progress(5, text='📊  Generating synthetic salary dataset…')
+            from generate_data import generate_salary_data
+            os.makedirs('data', exist_ok=True)
+            df = generate_salary_data(15000)
+            df.to_csv('data/salary_data.csv', index=False)
 
-    progress_bar.progress(100, text='✅  Ready!')
+        pbar.progress(15, text='⚙️  Preprocessing features…')
+        time.sleep(0.2)
+        pbar.progress(25, text='🔧  Training Ridge Regression…')
+
+        import train as tr
+        tr.main()
+
+        pbar.progress(100, text='✅  All models trained! Loading app…')
+        time.sleep(0.8)
+
     st.cache_data.clear()
     st.cache_resource.clear()
     st.rerun()
@@ -1087,20 +1112,9 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Check if model exists; if not, auto-train ──
+    # ── Auto-train on cold start (Streamlit Cloud: model is not in git) ──
     if not os.path.exists('models/best_model.pkl'):
-        st.markdown("""
-        <div class="info-card" style="text-align:center;padding:2rem;">
-            <div style="font-size:2.5rem;">🚀</div>
-            <h3 style="color:#4facfe;margin:0.5rem 0;">First-Time Setup Required</h3>
-            <p style="color:#7a8fa6;">
-                The ML model needs to be trained before you can use the estimator.
-                This takes about 2–3 minutes and only happens once.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button('⚡ Initialize & Train Models', type='primary', use_container_width=False):
-            run_initialization()
+        run_initialization()
         st.stop()
 
     C = get_constants()

@@ -7,5 +7,5 @@ venv/
 catboost_info/
 models/best_model.pkl
 models/model_results.json
-.streamlit/
+# .streamlit/ is intentionally tracked for Streamlit Cloud theme config
 *.log

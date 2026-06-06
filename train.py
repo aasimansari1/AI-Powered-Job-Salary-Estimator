@@ -58,28 +58,29 @@ def load_and_prepare():
 
 
 def build_models():
+    # Tuned for Streamlit Cloud free tier (1 GB RAM): reduced estimator counts
     models = {
         'Ridge Regression': Ridge(alpha=10.0),
         'Random Forest': RandomForestRegressor(
-            n_estimators=200, max_depth=20, min_samples_leaf=3,
+            n_estimators=120, max_depth=16, min_samples_leaf=4,
             n_jobs=-1, random_state=42
         ),
         'XGBoost': xgb.XGBRegressor(
-            n_estimators=400, learning_rate=0.05, max_depth=7,
+            n_estimators=250, learning_rate=0.06, max_depth=6,
             subsample=0.8, colsample_bytree=0.8,
             reg_alpha=0.1, reg_lambda=1.0,
             n_jobs=-1, random_state=42, verbosity=0
         ),
         'LightGBM': lgb.LGBMRegressor(
-            n_estimators=400, learning_rate=0.05, max_depth=7,
-            num_leaves=63, subsample=0.8, colsample_bytree=0.8,
+            n_estimators=250, learning_rate=0.06, max_depth=6,
+            num_leaves=48, subsample=0.8, colsample_bytree=0.8,
             reg_alpha=0.1, reg_lambda=1.0,
             n_jobs=-1, random_state=42, verbose=-1
         ),
     }
     if CATBOOST_AVAILABLE:
         models['CatBoost'] = CatBoostRegressor(
-            iterations=400, learning_rate=0.05, depth=7,
+            iterations=250, learning_rate=0.06, depth=6,
             random_seed=42, verbose=0
         )
     return models
