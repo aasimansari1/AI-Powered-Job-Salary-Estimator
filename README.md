@@ -2,6 +2,12 @@
 
 A polished, portfolio-ready data science application that predicts annual salaries using machine learning — no sign-up required, instant predictions.
 
+## 📸 Screenshots
+
+| Salary Prediction | Market Analytics |
+|:-----------------:|:----------------:|
+| ![Predict Tab](screenshot_predict.png) | ![Analytics Tab](screenshot_analytics.png) |
+
 ## ✨ Features
 
 - **Instant salary predictions** based on 11 input factors
