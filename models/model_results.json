@@ -1,0 +1,44 @@
+{
+  "results": [
+    {
+      "name": "Ridge Regression",
+      "r2": 0.4367,
+      "mae": 44620.75,
+      "rmse": 57525.49,
+      "cv_r2": 0.4601,
+      "train_time_s": 0.01
+    },
+    {
+      "name": "Random Forest",
+      "r2": 0.7576,
+      "mae": 26996.02,
+      "rmse": 37738.0,
+      "cv_r2": 0.7613,
+      "train_time_s": 2.94
+    },
+    {
+      "name": "XGBoost",
+      "r2": 0.8877,
+      "mae": 17600.84,
+      "rmse": 25687.8,
+      "cv_r2": 0.8884,
+      "train_time_s": 0.37
+    },
+    {
+      "name": "LightGBM",
+      "r2": 0.8857,
+      "mae": 17764.09,
+      "rmse": 25908.72,
+      "cv_r2": 0.8862,
+      "train_time_s": 0.4
+    }
+  ],
+  "best": {
+    "name": "XGBoost",
+    "r2": 0.8877,
+    "mae": 17600.84,
+    "rmse": 25687.8,
+    "cv_r2": 0.8884,
+    "train_time_s": 0.37
+  }
+}

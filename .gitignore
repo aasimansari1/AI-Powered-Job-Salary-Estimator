@@ -5,7 +5,5 @@ __pycache__/
 .venv/
 venv/
 catboost_info/
-models/best_model.pkl
-models/model_results.json
 # .streamlit/ is intentionally tracked for Streamlit Cloud theme config
 *.log
