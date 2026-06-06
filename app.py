@@ -318,6 +318,16 @@ PINK = '#f472b6'
 PALETTE = [PRIMARY_COLOR, SUCCESS_COLOR, WARN_COLOR, PURPLE, PINK, '#34d399', '#fb923c']
 
 
+def cl(**kw):
+    """Return CHART_LAYOUT merged with kw, deep-merging xaxis/yaxis to prevent duplicate-key errors."""
+    base = dict(CHART_LAYOUT)
+    for axis in ('xaxis', 'yaxis'):
+        if axis in kw:
+            kw[axis] = {**base.pop(axis, {}), **kw[axis]}
+    base.update(kw)
+    return base
+
+
 def fmt_currency(val: int) -> str:
     if val >= 1_000_000:
         return f'${val/1_000_000:.2f}M'
@@ -462,10 +472,7 @@ def render_prediction_tab(inputs: dict, result: dict):
                 fillcolor='rgba(79,172,254,0.08)',
             ))
             fig_growth.update_layout(
-                **CHART_LAYOUT,
-                height=240,
-                showlegend=False,
-                yaxis=dict(tickformat='$,.0f', gridcolor='rgba(255,255,255,0.06)'),
+                **cl(height=240, showlegend=False, yaxis=dict(tickformat='$,.0f')),
             )
             st.plotly_chart(fig_growth, use_container_width=True)
 
@@ -668,8 +675,7 @@ def render_analytics_tab(df: pd.DataFrame):
             color='Median Salary',
             color_continuous_scale=[[0, '#203a43'], [0.5, PRIMARY_COLOR], [1, SUCCESS_COLOR]],
         )
-        fig3.update_layout(**CHART_LAYOUT, height=320, coloraxis_showscale=False,
-                           xaxis=dict(tickangle=-20, gridcolor='rgba(255,255,255,0.06)'))
+        fig3.update_layout(**cl(height=320, coloraxis_showscale=False, xaxis=dict(tickangle=-20)))
         st.plotly_chart(fig3, use_container_width=True)
 
     with c4:
@@ -720,8 +726,7 @@ def render_analytics_tab(df: pd.DataFrame):
             color='Median Salary',
             color_continuous_scale=[[0, '#203a43'], [1, PINK]],
         )
-        fig6.update_layout(**CHART_LAYOUT, height=320, coloraxis_showscale=False,
-                           xaxis=dict(tickangle=-15, gridcolor='rgba(255,255,255,0.06)'))
+        fig6.update_layout(**cl(height=320, coloraxis_showscale=False, xaxis=dict(tickangle=-15)))
         st.plotly_chart(fig6, use_container_width=True)
 
     # ── Row 4: Work mode + Skill frequency ──
@@ -946,12 +951,8 @@ def render_compare_tab(C: dict):
                     ),
                 ))
             fig.update_layout(
-                **CHART_LAYOUT,
-                title='Estimated Annual Salary Comparison',
-                height=380,
-                showlegend=False,
-                yaxis=dict(tickformat='$,.0f', gridcolor='rgba(255,255,255,0.06)'),
-                xaxis=dict(gridcolor='rgba(255,255,255,0.06)'),
+                **cl(title='Estimated Annual Salary Comparison', height=380,
+                     showlegend=False, yaxis=dict(tickformat='$,.0f')),
             )
             st.plotly_chart(fig, use_container_width=True)
 
@@ -1041,13 +1042,8 @@ def render_model_tab(training_results: dict):
         text=[f'{v:.4f}' for v in df_r['R²']],
         textposition='outside',
     ))
-    fig.update_layout(
-        **CHART_LAYOUT,
-        title='R² Score Comparison',
-        height=320,
-        yaxis=dict(range=[0, 1.05], gridcolor='rgba(255,255,255,0.06)'),
-        showlegend=False,
-    )
+    fig.update_layout(**cl(title='R² Score Comparison', height=320,
+                           yaxis=dict(range=[0, 1.05]), showlegend=False))
     st.plotly_chart(fig, use_container_width=True)
 
     c1, c2 = st.columns(2)
@@ -1057,8 +1053,8 @@ def render_model_tab(training_results: dict):
                               marker_color=WARN_COLOR,
                               text=[f'${v:,.0f}' for v in df_r['MAE (USD)']],
                               textposition='outside'))
-        fig2.update_layout(**CHART_LAYOUT, title='Mean Absolute Error', height=300,
-                           yaxis=dict(tickformat='$,.0f', gridcolor='rgba(255,255,255,0.06)'))
+        fig2.update_layout(**cl(title='Mean Absolute Error', height=300,
+                               yaxis=dict(tickformat='$,.0f')))
         st.plotly_chart(fig2, use_container_width=True)
     with c2:
         fig3 = go.Figure()
@@ -1066,8 +1062,8 @@ def render_model_tab(training_results: dict):
                               marker_color=PURPLE,
                               text=[f'${v:,.0f}' for v in df_r['RMSE (USD)']],
                               textposition='outside'))
-        fig3.update_layout(**CHART_LAYOUT, title='Root Mean Squared Error', height=300,
-                           yaxis=dict(tickformat='$,.0f', gridcolor='rgba(255,255,255,0.06)'))
+        fig3.update_layout(**cl(title='Root Mean Squared Error', height=300,
+                               yaxis=dict(tickformat='$,.0f')))
         st.plotly_chart(fig3, use_container_width=True)
 
     st.markdown('<div class="section-title">📋 Full Results Table</div>', unsafe_allow_html=True)
